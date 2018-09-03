@@ -1,0 +1,28 @@
+BASE
+ident
+
+FLOW
+clos
+env
+
+PROGRAM
+lterm = env * clos
+
+- constructors
+lam : ident * lterm -> lterm
+var : ident -> lterm
+app : lterm * lterm -> lterm
+
+- filters
+mkClos : ident * lterm * env -> clos
+getClos : clos -> ident * lterm * env
+extEnv : env * ident * clos -> env
+getEnv : ident * env -> clos
+
+- atoms
+initial_env : unit -> env
+
+- rules
+Lambda(lam x_t1 x_t2) = [mkClos(x_t1, x_t2, x_s) ?> (x_o)]
+Var(var x_t) = [getEnv(x_t, x_s) ?> (x_o)]
+App(app x_t1 x_t2) = [H(x_s, x_t1, x_f1); getClos(x_f1) ?> (x_t3, x_t4, x_f2); H(x_s, x_t2, x_f3); extEnv(x_f2, x_t3, x_f3) ?> (x_f4); H(x_f4, x_t4, x_o)]

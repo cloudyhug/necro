@@ -1,0 +1,53 @@
+BASE
+ident
+lit
+
+FLOW
+state
+value
+vint
+vbool
+
+PROGRAM
+expr = state * value
+stat = state * state
+
+- constructors
+const : lit -> expr
+var : ident -> expr
++ : expr * expr -> expr
+== : expr * expr -> expr
+! : expr -> expr
+skip : stat
+:= : ident * expr -> stat
+;; : stat * stat -> stat
+if : expr * stat * stat -> stat
+while : expr * stat -> stat
+
+- filters
+litToVal : lit -> value
+read : ident * state -> value
+isInt : value -> vint
+add : vint * vint -> value
+eq : vint * vint -> value
+isBool : value -> vbool
+neg : vbool -> value
+write : ident * state * value -> state
+id : state -> state
+isTrue : vbool -> unit
+isFalse : vbool -> unit
+
+- atoms
+initial_state : unit -> state
+
+- rules
+LitInt(const x_t) = [litToVal(x_t) ?> (x_o)]
+Var(var x_t) = [read(x_t, x_s) ?> (x_o)]
+Add(+ x_t1 x_t2) = [H(x_s, x_t1, x_f1); isInt(x_f1) ?> (x_f1'); H(x_s, x_t2, x_f2); isInt(x_f2) ?> (x_f2'); add(x_f1', x_f2') ?> (x_o)]
+Eq(== x_t1 x_t2) = [H(x_s, x_t1, x_f1); isInt(x_f1) ?> (x_f1'); H(x_s, x_t2, x_f2); isInt(x_f2) ?> (x_f2'); eq(x_f1', x_f2') ?> (x_o)]
+Neg(! x_t) = [H(x_s, x_t, x_f1); isBool(x_f1) ?> (x_f1'); neg(x_f1') ?> (x_o)]
+Skip(skip) = [id(x_s) ?> (x_o)]
+Asn(:= x_t1 x_t2) = [H(x_s, x_t2, x_f2); write(x_t1, x_s, x_f2) ?> (x_o)]
+Seq(;; x_t1 x_t2) = [H(x_s, x_t1, x_f1); H(x_f1, x_t2, x_o)]
+If(if x_t1 x_t2 x_t3) = [H(x_s, x_t1, x_f1); isBool(x_f1) ?> (x_f1'); [| [isTrue(x_f1'); H(x_s, x_t2, x_o)] || [isFalse(x_f1'); H(x_s, x_t3, x_o)] |]{x_o}]
+While(while x_t1 x_t2) = [H(x_s, x_t1, x_f1); isBool(x_f1) ?> (x_f1'); [| [isTrue(x_f1'); H(x_s, x_t2, x_f2); H(x_f2, while x_t1 x_t2, x_o)] || [isFalse(x_f1'); id(x_s) ?> (x_o)] |]{x_o}]
