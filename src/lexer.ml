@@ -1,9 +1,12 @@
-open Common
+open Stream
+open Unitlex
 
 (* Tokenisers are functions that recognise some specific characters and
    translate them into lexemes. A tokeniser is called on a stream and returns
    an option : if it does not recognise the character(s), it returns None.
 *)
+
+let string_of_char_list cl = String.concat "" (List.map (String.make 1) cl)
 
 let token_space = function
   | More (' ', f) -> Some (Space, f())

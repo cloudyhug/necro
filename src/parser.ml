@@ -1,4 +1,6 @@
-open Common
+open Stream
+open Unitlex
+open Types
 
 (* Parser state type : the parser needs to remember the line number and the
    lists of everything it is building (constructors, filters, rules...).

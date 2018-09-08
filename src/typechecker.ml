@@ -1,4 +1,4 @@
-open Common
+open Types
 
 (* a domain is a set of variables *)
 module Domain = Set.Make
