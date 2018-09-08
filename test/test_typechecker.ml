@@ -1,7 +1,16 @@
-open Common
+open Stream
+open Types
 open Lexer
 open Parser
 open Typechecker
+
+(* getlines ic takes all the lines available in the input channel and puts
+   them in a string.
+*)
+let getlines ic =
+  let rec f acc =
+    try f ((input_line ic) :: acc) with End_of_file -> String.concat "\n" (List.rev acc)
+  in f []
 
 let t1 () =
   let gamma = [(FVar "x", Base "tx"); (TVar "y", Flow "ty")] in

@@ -1,4 +1,5 @@
-open Common
+open Stream
+open Unitlex
 open Lexer
 
 let t1 () =

@@ -1,4 +1,6 @@
-open Common
+open Stream
+open Unitlex
+open Types
 open Lexer
 open Parser
 
