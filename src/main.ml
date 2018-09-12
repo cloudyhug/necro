@@ -1,8 +1,12 @@
 open Stream
-open Lexer
-open Parser
 open Typechecker
 open Generator
+open Reader
+
+module R : READER = struct
+  include Lexer
+  include Parser
+end
 
 (* getlines ic takes all the lines available in the input channel and puts
    them in a string.
@@ -19,8 +23,8 @@ let () =
       open_in Sys.argv.(1)
       |> getlines
       |> stream_of_string
-      |> analex
-      |> parse
+      |> R.analex
+      |> R.parse
     in
     well_formedness_interpretation const filt rules;
     generate_interpreter bs fs ps atoms const filt rules Sys.argv.(2);
