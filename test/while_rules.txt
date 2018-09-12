@@ -9,8 +9,8 @@ vint
 vbool
 
 PROGRAM
-expr = state * value
-stat = state * state
+expr : state * value
+stat : state * state
 
 - constructors
 const : lit -> expr

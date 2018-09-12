@@ -82,11 +82,11 @@ let parse_flow_sort state s =
   | _ -> None
 
 (* Program sorts have a constant form (no state machine needed) :
-   name '=' input_type '*' output_type
+   name ':' input_type '*' output_type
 *)
 let parse_program_sort state s =
   match take_line_unitlex s with
-  | ([Ident n; Equal; Ident i; Times; Ident o], s') ->
+  | ([Ident n; Colon; Ident i; Times; Ident o], s') ->
     let ps =
       Program { ps_name = n; input_type = Flow i; output_type = Flow o }
     in

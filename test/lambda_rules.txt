@@ -6,7 +6,7 @@ clos
 env
 
 PROGRAM
-lterm = env * clos
+lterm : env * clos
 
 - constructors
 lam : ident * lterm -> lterm
