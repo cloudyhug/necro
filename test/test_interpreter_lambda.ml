@@ -37,14 +37,11 @@ module Flow = struct
   let rec unfold t env =
     match t with
     | Var x -> begin
-      try
-        let (b, t', env') =
-          match getEnv x env with
-          | Some (Clos c) -> c
-          | None -> failwith "unfold - getEnv"
-        in
+      match getEnv x env with
+      | Some (Clos c) ->
+        let (b, t', env') = c in
         Lam (b, unfold t' env')
-      with _ -> t
+      | None -> t
     end
     | Lam (b, t') -> Lam (b, unfold t' env)
     | App (t1, t2) -> App(unfold t1 env, unfold t2 env)
